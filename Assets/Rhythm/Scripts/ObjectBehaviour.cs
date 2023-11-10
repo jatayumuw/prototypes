@@ -25,13 +25,12 @@ public class ObjectBehaviour : MonoBehaviour
 
     public void NoteMovement()
     {
-        if (transform.position.x != objectPoolManager.endPoint.position.x)
+        if (transform.position.x > objectPoolManager.endPoint.position.x)
         {
             gameObject.transform.position += noteMoveSpeed * Time.deltaTime;
         }
         else
         {
-            objectPoolManager.Reset(); // This line remains the same
             ObjectPoolManager.Instance.Reset(); // Add this line to call the new method
         }
     }

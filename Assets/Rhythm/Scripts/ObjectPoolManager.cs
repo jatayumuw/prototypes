@@ -40,24 +40,6 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         Reset += ResetObjectPool;
-
-        StartCoroutine(LoopSpawn());
-    }
-
-    void Update()
-    { }
-
-    IEnumerator LoopSpawn()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-
-               
-            yield return new WaitForSeconds(1);
-            SpawnObjectsBasedOnAmplitude(audioReader.amplitudeAsInt);
-        }
-
-        yield return null;
     }
 
     void CreateObjectPool(GameObject prefab, int poolSize)
@@ -92,23 +74,24 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    void ResetObjectPool()
+    public void ResetObjectPool()
     {
-        Debug.Log("Ter-reset 1");
+        Debug.Log("Reset 1");
+
         foreach (var objectPool in objectPools)
         {
             GameObject prefab = objectPool.prefab;
-            Debug.Log("Ter-reset 1");
+            Debug.Log("Reset 2");
 
             if (pooledObjects.ContainsKey(prefab))
             {
-                Debug.Log("Ter-reset 2");
+                Debug.Log("Reset 3");
                 while (pooledObjects[prefab].Count > 0)
                 {
-                    Debug.Log("Ter-reset 3");
+                    Debug.Log("Reset 4");
                     GameObject obj = pooledObjects[prefab].Dequeue();
-
-                    obj.SetActive(false);
+                    obj.SetActive(false); // Deactivate the object before putting it back in the pool
+                    pooledObjects[prefab].Enqueue(obj);
                 }
             }
         }

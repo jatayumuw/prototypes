@@ -46,6 +46,12 @@ public class AudioReader : MonoBehaviour
         nextSampleTime = Time.time + sampleInterval;
         Debug.Log("int Amplitude: " + amplitudeAsInt);
 
+        StartCoroutine(LoopSpawn());
+    }
+
+    IEnumerator LoopSpawn()
+    {
+        yield return new WaitForSeconds(2);
         if (amplitudeAsInt > 0)
         {
             ObjectPoolManager.Instance.SpawnObjectsBasedOnAmplitude(1); // Spawn using element 1 for positive values
@@ -58,5 +64,7 @@ public class AudioReader : MonoBehaviour
         {
             ObjectPoolManager.Instance.SpawnObjectsBasedOnAmplitude(0); // Spawn using element 2 for negative values
         }
+
+        yield return null;
     }
 }
