@@ -1,4 +1,4 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,18 +15,25 @@ public class AudioReader : MonoBehaviour
     private float[] spectrumData;
     private float nextSampleTime;
 
-    private void Start()
+    private void OnEnable()
     {
         spectrumData = new float[sampleCount];
         nextSampleTime = Time.time;
     }
 
+    private IEnumerator Start()
+    {
+        yield return null;
+        while (true)
+            if (audioSource.isPlaying && Time.time >= nextSampleTime)
+            {
+                AudioSource();
+            }
+    }
+
     private void Update()
     {
-        if (audioSource.isPlaying && Time.time >= nextSampleTime)
-        {
-            AudioSource();
-        }
+
     }
 
     void AudioSource()
@@ -54,15 +61,15 @@ public class AudioReader : MonoBehaviour
         yield return new WaitForSeconds(2);
         if (amplitudeAsInt > 0)
         {
-            ObjectPoolManager.Instance.SpawnObjectsBasedOnAmplitude(1); // Spawn using element 1 for positive values
+            poolManager.EnableObjectsBasedOnAmplitude(1); // Spawn using element 1 for positive values
         }
         else if (amplitudeAsInt < 0)
         {
-            ObjectPoolManager.Instance.SpawnObjectsBasedOnAmplitude(2); // Spawn using element 2 for negative values
+            poolManager.EnableObjectsBasedOnAmplitude(2); // Spawn using element 2 for negative values
         }
         else
         {
-            ObjectPoolManager.Instance.SpawnObjectsBasedOnAmplitude(0); // Spawn using element 2 for negative values
+            poolManager.EnableObjectsBasedOnAmplitude(0); // Spawn using element 2 for negative values
         }
 
         yield return null;
