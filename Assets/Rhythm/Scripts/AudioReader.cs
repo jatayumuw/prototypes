@@ -24,16 +24,14 @@ public class AudioReader : MonoBehaviour
     private IEnumerator Start()
     {
         yield return null;
-        while (true)
-            if (audioSource.isPlaying && Time.time >= nextSampleTime)
-            {
-                AudioSource();
-            }
     }
 
     private void Update()
     {
-
+        if (audioSource.isPlaying && Time.time >= nextSampleTime)
+        {
+            AudioSource();
+        }
     }
 
     void AudioSource()
