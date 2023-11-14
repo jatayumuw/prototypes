@@ -58,7 +58,7 @@ public class PoolManager : MonoBehaviour
         settings.childObjects = settings.childObjects.Where(x => x != null).ToArray();
 
         // Advanced Debug Logs
-        Debug.Log($"[{name}] - Total Child Count: {settings.childObjects.Length}");
+        //Debug.Log($"[{name}] - Total Child Count: {settings.childObjects.Length}");
     }
 
     void SpawnObjectPool(PoolSettings settings)

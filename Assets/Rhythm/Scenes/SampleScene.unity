@@ -343,7 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolManager: {fileID: 2086910257}
   audioSource: {fileID: 702766511}
-  sampleCount: 256
+  sampleCount: 128
   amplitudeMappingMin: -1
   amplitudeMappingMax: 9
   sampleInterval: 0.5
