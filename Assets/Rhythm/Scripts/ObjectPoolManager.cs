@@ -7,11 +7,11 @@ using Random = UnityEngine.Random;
 public class ObjectPoolManager : MonoBehaviour
 {
     [Header("Main Parameters")]
-    [SerializeField] AudioReader audioReader;
+    ///[SerializeField] AudioReader audioReader;
     [SerializeField] ObjectBehaviour targetObject;
     [SerializeField] List<ObjectBehaviour> instantiatedObjects;
     [SerializeField] int poolSize;
-    [SerializeField] float spwanOffset;
+    //[SerializeField] float spawnOffset;
 
     [Header("Spawn Parameters")]
     public Transform spawnPoint;
@@ -53,14 +53,14 @@ public class ObjectPoolManager : MonoBehaviour
         obj.SetPoolManager(this);
         obj.SetID(currentIndex);
         instantiatedObjects.Add(obj);
-    }
+    }   
 
     public void EnableObjectsBasedOnAmplitude(int spriteIndex)
     {
         instantiatedObjects[currentPoolIndex].gameObject.SetActive(true);
         instantiatedObjects[currentPoolIndex].transform.position = spawnPoint.position;
         instantiatedObjects[currentPoolIndex].transform.rotation = Quaternion.identity;
-        instantiatedObjects[currentPoolIndex].InitiateNote(spriteIndex);
+        instantiatedObjects[currentPoolIndex].InitiateNote(spriteIndex); 
         currentPoolIndex++;
     }
 

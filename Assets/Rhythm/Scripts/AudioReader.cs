@@ -36,7 +36,7 @@ public class AudioReader : MonoBehaviour
 
     void AudioSource()
     {
-        audioSource.GetSpectrumData(spectrumData, 0, FFTWindow.Blackman);
+        audioSource.GetSpectrumData(spectrumData, 0, FFTWindow.BlackmanHarris);
 
         float totalAmplitude = 0;
 
@@ -49,7 +49,7 @@ public class AudioReader : MonoBehaviour
 
         amplitudeAsInt = Mathf.RoundToInt(mappedAmplitude);
         nextSampleTime = Time.time + sampleInterval;
-        Debug.Log("int Amplitude: " + amplitudeAsInt);
+        //Debug.Log("int Amplitude: " + amplitudeAsInt);
 
         StartCoroutine(LoopSpawn());
     }
