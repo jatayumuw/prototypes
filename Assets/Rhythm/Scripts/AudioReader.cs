@@ -1,19 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class AudioReader : MonoBehaviour
 {
+    [Header("Main Parameters")]
     [SerializeField] ObjectPoolManager poolManager;
-    public AudioSource audioSource;
-    public int sampleCount = 256;
-    public int amplitudeMappingMin = -1;
-    public int amplitudeMappingMax = 2;
-    public float sampleInterval = 0.5f;
-    public int amplitudeAsInt;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] int sampleCount;
+    [SerializeField] int amplitudeMappingMin;
+    [SerializeField] int amplitudeMappingMax;
+    [SerializeField] float sampleInterval;
+
+    [Header("Game Audio Parameter related")]
+    public int amplitudeDivider;
+    public int middleTreshold;
+    public int highTreshold;
 
     private float[] spectrumData;
     private float nextSampleTime;
+    private int amplitudeAsInt;
+
+    [SerializeField] private int beatCount;
+    private int BeatCount { get => beatCount; set {
+            if (beatCount > Random.Range(1, 10))
+            {
+                if (isHigh)
+                {
+                    isHigh = false;
+                }
+                else
+                {
+                    isHigh = true;
+                }
+                beatCount = 0;
+            }
+            else
+            {
+                beatCount = value;
+            }
+        } 
+    }
+
+    bool isHigh;
 
     private void OnEnable()
     {
@@ -45,31 +75,45 @@ public class AudioReader : MonoBehaviour
             totalAmplitude += spectrumData[i];
         }
 
-        float mappedAmplitude = Mathf.Lerp(amplitudeMappingMin, amplitudeMappingMax, totalAmplitude);
+        float mappedAmplitude = Mathf.Lerp(amplitudeMappingMin, amplitudeMappingMax, totalAmplitude) / amplitudeDivider;
 
         amplitudeAsInt = Mathf.RoundToInt(mappedAmplitude);
         nextSampleTime = Time.time + sampleInterval;
-        //Debug.Log("int Amplitude: " + amplitudeAsInt);
 
-        StartCoroutine(LoopSpawn());
+        float targetFrequency = 234f;
+        float hertzPerBin = (float)AudioSettings.outputSampleRate / 2f / sampleCount;
+        int targetIndex = (int)(targetFrequency / hertzPerBin);
+
+
+        LoopSpawn(targetIndex, hertzPerBin, amplitudeAsInt);
     }
 
-    IEnumerator LoopSpawn()
+    void LoopSpawn(int targetIndex, float hertzPerBin, float outputValue)
     {
-        yield return new WaitForSeconds(2);
-        if (amplitudeAsInt > 0)
+        string outString = "";
+        for (int i = targetIndex - 3; i <= targetIndex + 3; i++)
         {
-            poolManager.EnableObjectsBasedOnAmplitude(1); // Spawn using element 1 for positive values
-        }
-        else if (amplitudeAsInt < 0)
-        {
-            poolManager.EnableObjectsBasedOnAmplitude(2); // Spawn using element 2 for negative values
-        }
-        else
-        {
-            poolManager.EnableObjectsBasedOnAmplitude(0); // Spawn using element 2 for negative values
-        }
+            outString += string.Format("| Bin {0} : {1}Hz : {2} |   ", i, i * hertzPerBin, spectrumData[i]);
+            //yield return new WaitForSeconds(0.01f);
 
-        yield return null;
+            if (isHigh)
+            {
+                if (i == 6 && spectrumData[i] > .005f)
+                {
+                    poolManager.EnableObjectsBasedOnAmplitude(1, outputValue); // Spawn using element 1 for Mid
+                     BeatCount++;
+                }
+            }
+            else
+            {
+                if (i == 12 && spectrumData[i] > .005f)
+                {
+                    poolManager.EnableObjectsBasedOnAmplitude(2, outputValue); // Spawn using element 2 for High
+                    BeatCount++;
+                }
+            }
+
+        }
+        Debug.Log(outString); 
     }
 }

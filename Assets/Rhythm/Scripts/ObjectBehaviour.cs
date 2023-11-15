@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,8 +12,10 @@ public class ObjectBehaviour : MonoBehaviour
     public int poolID {get; private set;}
     public float noteMoveSpeed {get; private set;}
     public bool isActive { get => gameObject.activeSelf; }
-    [SerializeField] List<Sprite> sprites;
 
+    [Header("Inspector Params")]
+    [SerializeField] List<Sprite> sprites;
+    [SerializeField] TMP_Text valueText;
     private SpriteRenderer spriteRenderer {get => GetComponent<SpriteRenderer>();} 
     private Coroutine noteRoutine;
     private Action onCompleteMove;
@@ -37,13 +40,14 @@ public class ObjectBehaviour : MonoBehaviour
         objectPoolManager = poolManager;
     }
 
-    public void InitiateNote(int spriteIndex)
+    public void InitiateNote(int spriteIndex, float freqValue)
     {
         spriteRenderer.sprite = sprites[spriteIndex];
+        valueText.text = freqValue.ToString();
 
         if (spriteIndex == 0)
         {
-            transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         }
         else
         {

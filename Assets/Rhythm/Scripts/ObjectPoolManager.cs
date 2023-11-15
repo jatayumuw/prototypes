@@ -55,12 +55,12 @@ public class ObjectPoolManager : MonoBehaviour
         instantiatedObjects.Add(obj);
     }   
 
-    public void EnableObjectsBasedOnAmplitude(int spriteIndex)
+    public void EnableObjectsBasedOnAmplitude(int spriteIndex, float outputValue)
     {
         instantiatedObjects[currentPoolIndex].gameObject.SetActive(true);
         instantiatedObjects[currentPoolIndex].transform.position = spawnPoint.position;
         instantiatedObjects[currentPoolIndex].transform.rotation = Quaternion.identity;
-        instantiatedObjects[currentPoolIndex].InitiateNote(spriteIndex); 
+        instantiatedObjects[currentPoolIndex].InitiateNote(spriteIndex, outputValue); 
         currentPoolIndex++;
     }
 
