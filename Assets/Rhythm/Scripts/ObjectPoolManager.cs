@@ -6,94 +6,67 @@ using Random = UnityEngine.Random;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    public static ObjectPoolManager Instance;
-    public AudioReader audioReader;
+    [Header("Main Parameters")]
+    [SerializeField] AudioReader audioReader;
+    [SerializeField] ObjectBehaviour targetObject;
+    [SerializeField] List<ObjectBehaviour> instantiatedObjects;
+    [SerializeField] int poolSize;
+    [SerializeField] float spwanOffset;
 
-    [System.Serializable]
-    public class ObjectPool
-    {
-        public GameObject prefab;
-        public int poolSize;
-    }
-
-    public List<ObjectPool> objectPools = new List<ObjectPool>();
+    [Header("Spawn Parameters")]
     public Transform spawnPoint;
     public Transform endPoint;
 
-    public Action Reset;
+    [HideInInspector] public Action<ObjectBehaviour> Reset;
 
-    private Dictionary<GameObject, Queue<GameObject>> pooledObjects = new Dictionary<GameObject, Queue<GameObject>>();
-
-    private void OnEnable()
-    {
-        if (Instance == null)
+    private int currentIndex;
+    private int currentPoolIndex {get => currentIndex ; 
+        set {
+        if(currentIndex >= instantiatedObjects.Count - 1)
         {
-            Instance = this;
+            currentIndex = 0;
         }
-    }
-
-    void Start()
-    {
-        foreach (var objectPool in objectPools)
+        else
         {
-            CreateObjectPool(objectPool.prefab, objectPool.poolSize);
+            currentIndex = value;
         }
+    }}
 
+    IEnumerator Start()
+    {
+        yield return null;
         Reset += ResetObjectPool;
-    }
 
-    void CreateObjectPool(GameObject prefab, int poolSize)
-    {
-        if (!pooledObjects.ContainsKey(prefab))
-        {
-            pooledObjects[prefab] = new Queue<GameObject>();
-        }
+        //yield return new WaitForSeconds(delaySpawn);
 
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            obj.SetActive(false);
-            pooledObjects[prefab].Enqueue(obj);
-            obj.GetComponent<ObjectBehaviour>().objectPoolManager = this;
+            CreateObjectPool(targetObject, i);
         }
+
     }
 
-    public void SpawnObjectsBasedOnAmplitude(int prefabIndex)
+    void CreateObjectPool(ObjectBehaviour target, int currentIndex)
     {
-        GameObject selectedPrefab = objectPools[prefabIndex].prefab;
-    
-        if (pooledObjects.ContainsKey(selectedPrefab))
-        {
-            if (pooledObjects[selectedPrefab].Count > 0)
-            {
-                GameObject obj = pooledObjects[selectedPrefab].Dequeue();
-                obj.transform.position = spawnPoint.position;
-                obj.transform.rotation = Quaternion.identity;
-                obj.SetActive(true);
-            }
-        }
+        ObjectBehaviour obj = Instantiate(target, Vector3.zero, Quaternion.identity);
+        obj.gameObject.SetActive(false);
+        obj.SetPoolManager(this);
+        obj.SetID(currentIndex);
+        instantiatedObjects.Add(obj);
     }
 
-    public void ResetObjectPool()
+    public void EnableObjectsBasedOnAmplitude(int spriteIndex)
     {
-        Debug.Log("Reset 1");
+        instantiatedObjects[currentPoolIndex].gameObject.SetActive(true);
+        instantiatedObjects[currentPoolIndex].transform.position = spawnPoint.position;
+        instantiatedObjects[currentPoolIndex].transform.rotation = Quaternion.identity;
+        instantiatedObjects[currentPoolIndex].InitiateNote(spriteIndex);
+        currentPoolIndex++;
+    }
 
-        foreach (var objectPool in objectPools)
-        {
-            GameObject prefab = objectPool.prefab;
-            Debug.Log("Reset 2");
-
-            if (pooledObjects.ContainsKey(prefab))
-            {
-                Debug.Log("Reset 3");
-                while (pooledObjects[prefab].Count > 0)
-                {
-                    Debug.Log("Reset 4");
-                    GameObject obj = pooledObjects[prefab].Dequeue();
-                    obj.SetActive(false); // Deactivate the object before putting it back in the pool
-                    pooledObjects[prefab].Enqueue(obj);
-                }
-            }
-        }
+    public void ResetObjectPool(ObjectBehaviour targetObject)
+    {
+        targetObject.transform.position = spawnPoint.position;
+        targetObject.gameObject.SetActive(false);
     }
 }

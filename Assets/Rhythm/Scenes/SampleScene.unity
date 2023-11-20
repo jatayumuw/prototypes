@@ -594,13 +594,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioReader: {fileID: 702766512}
-  objectPools:
-  - prefab: {fileID: 2080616979172499234, guid: 9d6f1517970154c438d9c31cbed22cf9, type: 3}
-    poolSize: 12
-  - prefab: {fileID: 4620795777013812416, guid: 2be81317a6391354caa970879ec26274, type: 3}
-    poolSize: 12
-  - prefab: {fileID: 6770903326279116035, guid: e5e94cf0e34505842b036bd0afa43f64, type: 3}
-    poolSize: 12
+  targetObject: {fileID: 484741473313012395, guid: 82f726961f315f84c9e705b135c19217, type: 3}
+  instantiatedObjects: []
+  poolSize: 30
+  delaySpawn: 0
   spawnPoint: {fileID: 1823990150}
   endPoint: {fileID: 1362156683}
 --- !u!4 &2086910258
