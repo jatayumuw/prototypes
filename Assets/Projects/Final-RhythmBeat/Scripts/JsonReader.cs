@@ -12,11 +12,14 @@ public class JsonReader : MonoBehaviour
     [Header("Attachment")]
     public AudioSource anySource;
     public ObjectPoolManager objectPoolManager;
+    public BeatGameManager beatGameManager;
 
     IEnumerator Start()
     {
         yield return null;
         jsonFileName = Path.GetFileNameWithoutExtension(anySource.clip.name);
+
+        yield return new WaitUntil(() => beatGameManager.gameStart);
 
         AccessJsonFile();
         Debug.Log("JsonReader: Accessing Json");

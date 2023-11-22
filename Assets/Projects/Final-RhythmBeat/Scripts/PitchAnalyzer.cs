@@ -14,9 +14,21 @@ public class PitchAnalyzer : MonoBehaviour
 
     [Header("Variable (ReadOnly)")]
     public bool audioEnded = false;
-    [SerializeField] private float lastSecondLoudness, loudnessThresholdA, loudnessThresholdB, loudnessThresholdC, maxPitch = 0, realHighNotes;
+    [SerializeField] private float lastSecondLoudness, maxPitch = 0, realHighNotes;
     public int spawnNoteACount, spawnNoteBCount, nullCount;
     public string songPositioning;
+
+    [Header("Output")]
+    [Range(0, 2)]
+    public int beatHighResult;
+    public float HighThreshold;
+    [Range(0, 2)]
+    public int beatMidResult;
+    public float MidThreshold;
+
+    [Range(0, 2)]
+    public int beatLowResult;
+    public float LowThreshold;
 
     void Start()
     {
@@ -74,7 +86,7 @@ public class PitchAnalyzer : MonoBehaviour
             }
         }
 
-        float pitchFrequency = maxIndex * (maxFrequency / spectrum.Length);
+        float pitchFrequency = ( maxIndex * (maxFrequency / spectrum.Length) ) *2;
         if (pitchFrequency > maxPitch)
         {
             maxPitch = pitchFrequency;
@@ -93,13 +105,13 @@ public class PitchAnalyzer : MonoBehaviour
 
         //displaying data
         currentLoudnessTMP.text = loudness + " Db";
-        if (pitchFrequency > 2000) //high pitch
+        if (pitchFrequency > 4000) //high pitch
         {
             currentPitchTMP.text = "High: " + pitchFrequency;
 
-            if (loudness >= loudnessThresholdA)
+            if (loudness >= HighThreshold)
             {
-                jsonWriter.DataWriter(2);
+                jsonWriter.DataWriter(beatHighResult);
                 StartCoroutine(BlinkIconA());
                 spawnNoteACount++;
             }
@@ -108,14 +120,14 @@ public class PitchAnalyzer : MonoBehaviour
                 nullCount++;
             }
         }
-        else if (pitchFrequency >= 500 && pitchFrequency <= 2000) //mid pitch
+        else if (pitchFrequency >= 500 && pitchFrequency <= 4000) //mid pitch
         {
             currentPitchTMP.text = "Mid: " + pitchFrequency;
 
-            if (loudness >= loudnessThresholdB)
+            if (loudness >= MidThreshold)
             {
-                jsonWriter.DataWriter(0);
-                StartCoroutine(BlinkIconB());
+                jsonWriter.DataWriter(beatMidResult);
+                StartCoroutine(BlinkIconA());
                 spawnNoteBCount++;
             }
             else
@@ -127,9 +139,9 @@ public class PitchAnalyzer : MonoBehaviour
         {
             currentPitchTMP.text = "Low: " + pitchFrequency;
 
-            if (loudness >= loudnessThresholdC)
+            if (loudness >= LowThreshold)
             {
-                jsonWriter.DataWriter(1);
+                jsonWriter.DataWriter(beatLowResult);
                 StartCoroutine(BlinkIconB());
                 spawnNoteBCount++;
             }

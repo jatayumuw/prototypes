@@ -284,7 +284,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e5c880e09f22b1b4db153d4f865e5cb9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: dfb3df51d4585b54b859baa00ae27474, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 711255562}
   - component: {fileID: 711255561}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BeatA Visualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -412,15 +412,15 @@ RectTransform:
   m_GameObject: {fileID: 711255559}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 7.29, y: 7.29, z: 7.29}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1763266235}
   m_Father: {fileID: 1329709178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -374.31363, y: 133.98636}
+  m_AnchoredPosition: {x: -100, y: 0}
   m_SizeDelta: {x: 22.929, y: 22.929}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &711255561
@@ -911,7 +911,7 @@ GameObject:
   - component: {fileID: 1306164234}
   - component: {fileID: 1306164233}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: BeatB Visualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -926,15 +926,15 @@ RectTransform:
   m_GameObject: {fileID: 1306164231}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 7.29, y: 7.29, z: 7.29}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1297351202}
   m_Father: {fileID: 1329709178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -374.31363, y: 119.4}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: 22.929, y: 22.929}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1306164233
@@ -1226,7 +1226,7 @@ GameObject:
   - component: {fileID: 1934007739}
   - component: {fileID: 1934007740}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Writer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1267,15 +1267,18 @@ MonoBehaviour:
   spawnIconB: {fileID: 1306164231}
   audioEnded: 0
   lastSecondLoudness: 0
-  loudnessThresholdA: 2.2
-  loudnessThresholdB: 1
-  loudnessThresholdC: 0.8
   maxPitch: 0
   realHighNotes: 0
   spawnNoteACount: 0
   spawnNoteBCount: 0
   nullCount: 0
   songPositioning: 0 / 0
+  beatHighResult: 2
+  HighThreshold: 1
+  beatMidResult: 2
+  MidThreshold: 1
+  beatLowResult: 1
+  LowThreshold: 8
 --- !u!114 &1934007740
 MonoBehaviour:
   m_ObjectHideFlags: 0
