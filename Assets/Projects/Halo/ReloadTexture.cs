@@ -26,10 +26,8 @@ public class ReloadTexture : MonoBehaviour
         if (canLoadTexture)
         {
             Debug.Log("!? Refreshing File Path");
-            path = @"D:\PycharmProjects\RnD_ProjectHalo\Data\userSelfie_Unwrap.jpg";
+            path = @"D:\PycharmProjects\RnD_ProjectHalo\Data\_userSelfie_unwrapped.jpg";
             UpdateImage();
-
-            canLoadTexture = false;
         }
     }
 
@@ -51,6 +49,8 @@ public class ReloadTexture : MonoBehaviour
 
             Debug.Log("!? Image is Updated: {}");
             Debug.Log($"!? Texture Image Using: {path}");
+
+            canLoadTexture = false;
         }
     }
 
